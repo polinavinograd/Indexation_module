@@ -41,6 +41,7 @@ body {
 
 .search-results-table th, .search-results-table td {
     border: solid black 1px;
+    padding: 0.5rem;
 }
 
 .search-results-table ul {
