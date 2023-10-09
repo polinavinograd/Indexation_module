@@ -1,0 +1,48 @@
+* {
+    font-family: sans-serif;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    overflow: hidden;
+}
+
+#router-outlet-container {
+    width: 100vw;
+    height: 100vh;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-row-centered {
+    display: flex;
+    align-items: center;
+}
+
+.flex-column-centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-results-table {
+    border-collapse: collapse;
+}
+
+.search-results-table th, .search-results-table td {
+    border: solid black 1px;
+}
+
+.search-results-table ul {
+    list-style: none;
+}
