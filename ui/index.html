@@ -8,9 +8,7 @@
     <title>Модуль индексации</title>
 </head>
 <body>
-    <div id="router-outler-container">
-        <main id="router-outlet"></main>
-    </div>
+    <main id="router-outlet"></main>
 </body>
 
 <script src="./router/router.js"></script>
@@ -27,6 +25,8 @@
 
     router.navigate(mainPage);
 </script>
-<script src="./http-client/http-client.js"></script>
+<script src="./http-client/http-client.js">
+    const httpClient = new HttpClient('http://localhost:3030');
+</script>
 
 </html>
