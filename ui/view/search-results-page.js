@@ -51,7 +51,7 @@ class SearchResultsPage extends Page {
                     ],
                     eventListeners: {
                         click: () => {
-                            // httpClient.get({
+                            // httpClient.post({
                             //     path: "text",
                             //     body: {
                             //         docName: doc.name

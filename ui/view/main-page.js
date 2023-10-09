@@ -21,7 +21,7 @@ class MainPage extends Page {
                     if (event.key !== 'Enter') {
                         return;
                     }
-                    // httpClient.get({
+                    // httpClient.post({
                     //     path: "docs",
                     //     body: {
                     //         query: event.target.value
@@ -39,9 +39,27 @@ class MainPage extends Page {
         const metricsButton = ViewUtils.tag({
             name: "button",
             eventListeners: {
-                click: () => { alert("metrics!"); }
+                click: () => {
+                    // httpClient.get({
+                    //     path: "metrics"
+                    // })
+                    Promise.resolve({
+                        recall: 1,
+                        precision: 0.8,
+                        accuracy: 0.6,
+                        error: 0.4,
+                        fMeasure: 0.2
+                    })
+                        .then(response => alert(`
+                            Полнота: ${response.recall}
+                            Точность: ${response.precision}
+                            Правильность: ${response.accuracy}
+                            Ошибка: ${response.error}
+                            F-мера ${response.fMeasure}
+                        `))
+                }
             },
-            text: "Расчёт метрик"
+            text: "Метрики"
         });
 
         const helpButton = ViewUtils.tag({
