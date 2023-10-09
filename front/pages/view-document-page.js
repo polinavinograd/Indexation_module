@@ -13,17 +13,6 @@ class ViewDocumentPage extends Page {
             text: "Назад"
         });
 
-        const helpButton = ViewUtils.tag({
-            name: "button",
-            attributes: {
-                class: "btn-default"
-            },
-            eventListeners: {
-                click: () => { alert("help!"); }
-            },
-            text: "Помощь"
-        });
-
         const docTextContainer = ViewUtils.tag({
             name: "p",
             text: documentText
@@ -41,7 +30,7 @@ class ViewDocumentPage extends Page {
                     attributes: {
                         class: "buttons-container"
                     },
-                    children: [helpButton, backButton]
+                    child: backButton
                 })
             ]
         })

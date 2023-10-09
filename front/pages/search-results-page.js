@@ -19,7 +19,9 @@ class SearchResultsPage extends Page {
                 class: "btn-default"
             },
             eventListeners: {
-                click: () => { alert("help!"); }
+                click: () => {
+                    alert(`Нажмите на запись в таблице, чтобы увидеть полный текст документа.`);
+                }
             },
             text: "Помощь"
         });

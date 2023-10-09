@@ -54,13 +54,7 @@ class MainPage extends Page {
                         error: 0.4,
                         fMeasure: 0.2
                     })
-                        .then(response => alert(`
-                            Полнота: ${response.recall}
-                            Точность: ${response.precision}
-                            Правильность: ${response.accuracy}
-                            Ошибка: ${response.error}
-                            F-мера ${response.fMeasure}
-                        `))
+                        .then(response => alert(`Полнота: ${response.recall}\nТочность: ${response.precision}\nПравильность: ${response.accuracy}\nОшибка: ${response.error}\nF-мера ${response.fMeasure}`))
                 }
             },
             text: "Метрики"
@@ -72,7 +66,9 @@ class MainPage extends Page {
                 class: "btn-default"
             },
             eventListeners: {
-                click: () => { alert("help!"); }
+                click: () => {
+                    alert("Введите запрос и нажмите клавишу Enter, чтобы выполнить поиск по документам.\nНажмите кнопку 'Метрики', чтобы просмотреть значения метрик релевантности запросов."); 
+                }
             },
             text: "Помощь"
         });
