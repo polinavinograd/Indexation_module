@@ -9,30 +9,41 @@ body {
     overflow: hidden;
 }
 
-#router-outlet-container {
+#router-outlet {
     width: 100vw;
     height: 100vh;
-}
-
-.flex {
-    display: flex;
-}
-
-.flex-centered {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.flex-row-centered {
-    display: flex;
-    align-items: center;
+.btn-default {
+    padding: 0.5rem;
 }
 
-.flex-column-centered {
+.buttons-container {
+    display: flex;
+    gap: 3rem;
+}
+
+.main-page {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 1rem;
+}
+
+.searchbar {
+    height: 2rem;
+    width: 50rem;
+    padding: 0.5rem;
+}
+
+.search-results-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
 .search-results-table {
@@ -46,4 +57,11 @@ body {
 
 .search-results-table ul {
     list-style: none;
+}
+
+.view-document-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }

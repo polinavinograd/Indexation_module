@@ -15,6 +15,7 @@ class MainPage extends Page {
             name: "input",
             attributes: {
                 type: "text",
+                class: "searchbar"
             },
             eventListeners: {
                 keyup: (event) => {
@@ -38,6 +39,9 @@ class MainPage extends Page {
 
         const metricsButton = ViewUtils.tag({
             name: "button",
+            attributes: {
+                class: "btn-default"
+            },
             eventListeners: {
                 click: () => {
                     // httpClient.get({
@@ -64,6 +68,9 @@ class MainPage extends Page {
 
         const helpButton = ViewUtils.tag({
             name: "button",
+            attributes: {
+                class: "btn-default"
+            },
             eventListeners: {
                 click: () => { alert("help!"); }
             },
@@ -72,6 +79,9 @@ class MainPage extends Page {
 
         this._page = ViewUtils.tag({
             name: "div",
+            attributes: {
+                class: "page main-page"
+            },
             children: [
                 ViewUtils.tag({
                     name: "div",
@@ -79,7 +89,10 @@ class MainPage extends Page {
                 }),
                 ViewUtils.tag({
                     name: "div",
-                    children: [metricsButton, helpButton]
+                    attributes: {
+                        class: "buttons-container"
+                    },
+                    children: [helpButton, metricsButton]
                 })
             ]
         });

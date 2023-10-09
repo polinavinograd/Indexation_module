@@ -2,6 +2,9 @@ class SearchResultsPage extends Page {
     buildPage(docArray = []) {
         const backButton = ViewUtils.tag({
             name: "button",
+            attributes: {
+                class: "btn-default"
+            },
             eventListeners: {
                 click: () => {
                     router.navigate(mainPage);
@@ -12,6 +15,9 @@ class SearchResultsPage extends Page {
 
         const helpButton = ViewUtils.tag({
             name: "button",
+            attributes: {
+                class: "btn-default"
+            },
             eventListeners: {
                 click: () => { alert("help!"); }
             },
@@ -70,11 +76,17 @@ class SearchResultsPage extends Page {
 
         this._page = ViewUtils.tag({
             name: "div",
+            attributes: {
+                class: "page search-results-page"
+            },
             children: [
                 searchResultsTable,
                 ViewUtils.tag({
                     name: "div",
-                    children: [backButton, helpButton]
+                    attributes: {
+                        class: "buttons-container"
+                    },
+                    children: [helpButton, backButton]
                 })
             ]
         });
