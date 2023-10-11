@@ -37,13 +37,14 @@ def normalize_text(tokenized: list) -> list:
 
 
 # удаление вспомогательных частей речи(кроме союзов) и ключевых слов поиска
-def remove_tokens(normalized_tags: list) -> list:
+def remove_tokens(normalized_tags: list, need_to_remove_keywords: bool = False) -> list:
     result_text = []
     for tag in normalized_tags:
         if tag[1][0] not in ['V', 'N', 'R', 'J', 'C']:
             continue
-        if tag[0] not in removable_tokens:
-            result_text.append(tag[0] if tag[0] != 'but' else "and")
+        if need_to_remove_keywords:
+            if tag[0] not in removable_tokens:
+                result_text.append(tag[0] if tag[0] != 'but' else "and")
     return result_text
 
 
@@ -73,10 +74,10 @@ def process_text(query: list, text: str) -> dict:
 
 def check_logic_strategy(text: str, query: str):
     if query.count('"') > 1:
-        tokenized_query = remove_tokens(normalize_text(exact_wording(query)))
+        tokenized_query = remove_tokens(normalize_text(exact_wording(query)), True)
     else:
         tokenized = nltk.word_tokenize(query)
-        tokenized_query = remove_tokens(normalize_text(tokenized))
+        tokenized_query = remove_tokens(normalize_text(tokenized), True)
 
     tokenized_query_without_conjunctions = delete_conjunctions(tokenized_query)
     text_dict = process_text(tokenized_query_without_conjunctions, text)
