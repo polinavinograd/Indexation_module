@@ -22,13 +22,12 @@ class MainPage extends Page {
                     if (event.key !== 'Enter') {
                         return;
                     }
-                    // httpClient.post({
-                    //     path: "docs",
-                    //     body: {
-                    //         query: event.target.value
-                    //     }
-                    // });
-                    Promise.resolve(docArrayMock)
+                    httpClient.post({
+                        path: "docs",
+                        body: {
+                            query: event.target.value
+                        }
+                    })
                         .then(response => {
                             searchResultsPage.buildPage(response);
                             router.navigate(searchResultsPage);
@@ -44,15 +43,8 @@ class MainPage extends Page {
             },
             eventListeners: {
                 click: () => {
-                    // httpClient.get({
-                    //     path: "metrics"
-                    // })
-                    Promise.resolve({
-                        recall: 1,
-                        precision: 0.8,
-                        accuracy: 0.6,
-                        error: 0.4,
-                        fMeasure: 0.2
+                    httpClient.get({
+                        path: "metrics"
                     })
                         .then(response => alert(`Полнота: ${response.recall}\nТочность: ${response.precision}\nПравильность: ${response.accuracy}\nОшибка: ${response.error}\nF-мера ${response.fMeasure}`))
                 }

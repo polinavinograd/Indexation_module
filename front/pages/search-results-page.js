@@ -37,8 +37,6 @@ class SearchResultsPage extends Page {
                     children: [
                         "Название документа",
                         "Наиболее часто встречающиеся слова",
-                        "Релевантность",
-                        "Дата добавления",
                         "Первые <=300 символов"
                     ].map(columnHeader => ViewUtils.tag({ name: "th", text: columnHeader }))
                 }),
@@ -53,19 +51,16 @@ class SearchResultsPage extends Page {
                                 text: `${wordWeightObj.word}: ${wordWeightObj.weightCoef}`
                             }))
                         }),
-                        ViewUtils.tag({ name: "td", text: doc.relevance }),
-                        ViewUtils.tag({ name: "td", text: doc.date }),
                         ViewUtils.tag({ name: "td", text: doc.snippet })
                     ],
                     eventListeners: {
                         click: () => {
-                            // httpClient.post({
-                            //     path: "text",
-                            //     body: {
-                            //         docName: doc.name
-                            //     }
-                            // })
-                            Promise.resolve('This is the full text of a document.')
+                            httpClient.post({
+                                path: "text",
+                                body: {
+                                    docName: doc.name
+                                }
+                            })
                                 .then(response => {
                                     viewDocumentPage.buildPage(response);
                                     router.navigate(viewDocumentPage);

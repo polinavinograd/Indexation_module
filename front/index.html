@@ -11,6 +11,7 @@
     <main id="router-outlet"></main>
 </body>
 
+<script src="./http-client/http-client.js"></script>
 <script src="./router/router.js"></script>
 <script src="./utils/view-utils.js"></script>
 <script src="./pages/page.js"></script>
@@ -18,15 +19,13 @@
 <script src="./pages/search-results-page.js"></script>
 <script src="./pages/view-document-page.js"></script>
 <script>
+    const httpClient = new HttpClient('http://localhost:5000');
     const router = new Router("router-outlet");
     const mainPage = new MainPage();
     const searchResultsPage = new SearchResultsPage();
     const viewDocumentPage = new ViewDocumentPage();
 
     router.navigate(mainPage);
-</script>
-<script src="./http-client/http-client.js">
-    const httpClient = new HttpClient('http://localhost:3030');
 </script>
 
 </html>

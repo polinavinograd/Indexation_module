@@ -4,11 +4,7 @@ from nltk.corpus import wordnet
 import re
 import os
 
-folder_path = "E:/Important/uchoba_rep/Indexation_module/texts"
-
-nltk.download('averaged_perceptron_tagger')
-nltk.download('wordnet')
-nltk.download('punkt')
+folder_path = "/home/loktevka/Documents/uchoba/Indexation_module/texts"
 
 # ключевые слова поиска, подлежащие удалению
 removable_tokens = ["find", "document", 'article', 'text', 'papers', "information", "data", "be"]
