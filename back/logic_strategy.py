@@ -2,6 +2,9 @@ import nltk
 from nltk import WordNetLemmatizer
 from nltk.corpus import wordnet
 import re
+import os
+
+folder_path = "../texts"
 
 nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
@@ -54,7 +57,7 @@ def delete_conjunctions(query: list):
     return res
 
 
-def process_text(query: list, text: str) -> dict:
+def check_tokens_in_text(query: list, text: str) -> dict:
     res = {}
     added_keys = set()
     for el in query:
@@ -72,15 +75,18 @@ def process_text(query: list, text: str) -> dict:
     return res
 
 
-def check_logic_strategy(text: str, query: str):
+def tokenize_query(query: str) -> list:
     if query.count('"') > 1:
         tokenized_query = remove_tokens(normalize_text(exact_wording(query)), True)
     else:
         tokenized = nltk.word_tokenize(query)
         tokenized_query = remove_tokens(normalize_text(tokenized), True)
+    return tokenized_query
 
+
+def check_logic_strategy(text: str, tokenized_query: list):
     tokenized_query_without_conjunctions = delete_conjunctions(tokenized_query)
-    text_dict = process_text(tokenized_query_without_conjunctions, text)
+    text_dict = check_tokens_in_text(tokenized_query_without_conjunctions, text)
     prev_word = ""
     res = {}
     or_statements = []
@@ -103,6 +109,21 @@ def check_logic_strategy(text: str, query: str):
     return any(text_dict[key] is True for key in or_statements) if len(or_statements) != 0 else True
 
 
+def documents_after_logic_search(query: list) -> list:
+    relevant_docs = []
+    for file in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, file)
+        if os.path.isfile(file_path):
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    file_contents = f.read()
+                    if check_logic_strategy(file_contents, query):
+                        relevant_docs.append(file)
+            except Exception as e:
+                print(f"Ошибка при обработке файла {file_path}: {str(e)}")
+    return relevant_docs
+
+
 if __name__ == "__main__":
     # text = 'bees flowers'
     # text = 'bees flowers roses'
@@ -113,4 +134,3 @@ if __name__ == "__main__":
     # text = 'roses are red'
     # text = 'new roses'
 
-    print(check_logic_strategy(text, string))

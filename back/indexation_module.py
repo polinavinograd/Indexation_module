@@ -1,18 +1,12 @@
 import math
 import nltk
-from logic_strategy import normalize_text, remove_tokens
+from logic_strategy import normalize_text, folder_path, documents_after_logic_search, delete_conjunctions, tokenize_query
 import os
 
-folder_path = "../texts"
 files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
 
 
-def process_text(text: str) -> list:
-    tokenized = nltk.word_tokenize(text)
-    tokenized = remove_tokens(normalize_text(tokenized))
-    return tokenized
-
-
+# поиск инверсной частоты элемента запроса element
 def find_inverse_frequency(element: str) -> float:
     file_count = 0
     for file in os.listdir(folder_path):
@@ -32,30 +26,45 @@ def find_inverse_frequency(element: str) -> float:
     return inverse_frequency
 
 
-# есть 2 вида нормализованных терминов:
-# либо строка из нескольких слов "red roses" - если ищется конкретная формулировка,
-# либо одно слово в начальной форме: "rose"
-#
-# нужно посчитать вхождение термина в документ
-#
-# считать вхождения в ненормализованный текст недостаточно, т.к. есть использования термина в неначальной форме,
-# которые тоже считаются
-# считать вхождения в нормализованный текст проблемно из-за наличия "конкретных формулировок из нескольких слов"
-# - в нормализованном тексте их будет 0
-def find_weights(query: list, text:str):
+# поиск весов элементов запроса
+def find_weights_of_query_elements(query: list, text: str) -> dict:
     weights = {}
-    for element in query:
+    for element in delete_conjunctions(query):
         norm_text = [tag[0] for tag in normalize_text(nltk.word_tokenize(text))]
-        if element in text:
+        if " " in element:
             q = text.count(element)/len(text.split())
-        if element in norm_text:
+        else:
             q = norm_text.count(element)/len(norm_text)
         weight = q * find_inverse_frequency(element)
         weights.update({element: weight})
     return weights
 
 
+def get_file_contents(file_name: str) -> str:
+    file_path = os.path.join(folder_path, file_name)
+    if os.path.isfile(file_path):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                file_contents = f.read()
+                return file_contents
+        except Exception as e:
+            print(f"Ошибка при обработке файла {file_path}: {str(e)}")
+
+
+def get_sorted_relevant_docs(query: list) -> list:
+    docs = documents_after_logic_search(query)
+    docs_for_sorting = {}
+    for file in docs:
+        text = get_file_contents(file)
+        docs_for_sorting.update({file: sum(find_weights_of_query_elements(query, text).values())})
+    sorted_docs = sorted(docs_for_sorting.items(), key=lambda item: item[1], reverse=True)
+    return [doc[0] for doc in sorted_docs]
+
+
 if __name__ == "__main__":
-    pass
+    string = '"red roses" or "new document about"'
+    text = 'red roses'
+    query = tokenize_query(string)
+    print(get_sorted_relevant_docs(query))
     # print(find_inverse_frequency(['roses', 'new document about']))
 
