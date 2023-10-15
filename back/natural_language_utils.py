@@ -24,3 +24,21 @@ class NaturalLanguageUtils:
     @staticmethod
     def normalize_tokens_only(tokenized_text: list[str]) -> list[str]:
         return list(map(lambda tag: tag[0], NaturalLanguageUtils.normalize(tokenized_text)))
+    
+    @staticmethod
+    def synonyms(word: str, max_synonyms: int = 3) -> list[str]:
+        SYNONYMS = []
+
+        synonyms_found = 0
+        for synset in wordnet.synsets(word):
+            for lemma in synset.lemmas():
+                if lemma.name() in SYNONYMS or lemma.name() == word:
+                    continue
+                SYNONYMS.append(lemma.name())
+                synonyms_found += 1
+                if synonyms_found == max_synonyms:
+                    break
+            if synonyms_found == max_synonyms:
+                    break
+
+        return SYNONYMS
