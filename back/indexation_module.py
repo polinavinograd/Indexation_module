@@ -1,8 +1,7 @@
 import math
 import nltk
 import os
-from logic_strategy import normalize_text, folder_path, documents_after_logic_search, delete_conjunctions, \
-    tokenize_query
+from logic_strategy import normalize_text, folder_path, documents_after_logic_search, delete_conjunctions
 
 files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
 
@@ -53,12 +52,3 @@ def get_sorted_relevant_docs(tokenized_query: list) -> list:
         docs_for_sorting.update({file: sum(find_weights_of_query_elements(tokenized_query, file_contents).values())})
     sorted_docs = sorted(docs_for_sorting.items(), key=lambda item: item[1], reverse=True)
     return [doc[0] for doc in sorted_docs]
-
-
-if __name__ == "__main__":
-    string = '"red roses" or "new document about"'
-    # text = 'red roses'
-    query = tokenize_query(string)
-    print(get_sorted_relevant_docs(query))
-    # print(find_inverse_frequency(['roses', 'new document about']))
-
