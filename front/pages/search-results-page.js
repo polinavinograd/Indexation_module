@@ -36,7 +36,9 @@ class SearchResultsPage extends Page {
                     name: "tr",
                     children: [
                         "Название документа",
-                        "Наиболее часто встречающиеся слова",
+                        "Весовые коэффициенты ключевых слов запроса",
+                        "Релевантность запросу",
+                        "Дата добавления в базу данных",
                         "Первые <=300 символов"
                     ].map(columnHeader => ViewUtils.tag({ name: "th", text: columnHeader }))
                 }),
@@ -46,11 +48,13 @@ class SearchResultsPage extends Page {
                         ViewUtils.tag({ name: "td", text: doc.name }),
                         ViewUtils.tag({
                             name: "td",
-                            children: doc.topWords.map(wordWeightObj => ViewUtils.tag({
+                            children: Object.keys(doc.topWords).map(word => ViewUtils.tag({
                                 name: "p",
-                                text: `${wordWeightObj.word}: ${wordWeightObj.weightCoef}`
+                                text: `${word}: ${doc.topWords[word]}`
                             }))
                         }),
+                        ViewUtils.tag({ name: "td", text: doc.relevance }),
+                        ViewUtils.tag({ name: "td", text: doc.date }),
                         ViewUtils.tag({ name: "td", text: doc.snippet })
                     ],
                     eventListeners: {

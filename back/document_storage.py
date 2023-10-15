@@ -17,7 +17,7 @@ class DocumentStorage:
                  db_path = "E:/Important/uchoba_rep/Indexation_module/back/database/documents_database.db",
                  documents_path = "E:/Important/uchoba_rep/Indexation_module/texts"
                 ):
-        self.db_connection = sqlite3.connect(db_path)
+        self.db_connection = sqlite3.connect(db_path, check_same_thread=False)
         self.cursor = self.db_connection.cursor()
         if len(self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='documents'").fetchall()) == 0:
             self.initialize_db()
@@ -58,3 +58,9 @@ class DocumentStorage:
             dbRow[1],
             datetime.datetime(dbRow[2], dbRow[3], dbRow[4], dbRow[5], dbRow[6])
         ), [row for row in self.cursor.execute('SELECT * FROM documents')]))
+    
+    def get_document_by_name(self, doc_name: str) -> Document:
+        for document in self.get_all_documents():
+            if document.name == doc_name:
+                return document
+        return None

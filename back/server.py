@@ -1,48 +1,29 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from main import search
-from indexation_module import get_file_contents, find_weights_of_query_elements
-from logic_strategy import tokenize_query
+from main import search, get_doc_text_by_name, get_metrics
 
 app = Flask(__name__)
 CORS(app)
 
-
 @app.route('/docs', methods=['POST'])
 def docs():
-    query = request.json["query"]
-    docsList = search(query)
-    response = []
-    for doc_name in docsList:
-        full_text = get_file_contents(doc_name)
-        top_words = []
-        for key, value in find_weights_of_query_elements(tokenize_query(query), full_text).items():
-            top_words.append({ "word": key, "weightCoef": value })
-        document_info = {
-            "name": doc_name,
-            "topWords": top_words,
-            "snippet": full_text[:300]
-        }
-        response.append(document_info)
-    return jsonify(response)
-
+    SEARCH_RESULTS = search(request.json["query"])
+    RESPONSE = list(map(lambda search_result: {
+        "name": search_result.document.name,
+        "topWords": search_result.top_words,
+        "relevance": search_result.relevance,
+        "date": f'{search_result.document.creation_datetime.day}-{search_result.document.creation_datetime.month}-{search_result.document.creation_datetime.year}',
+        "snippet": search_result.document.text[:300]
+    }, SEARCH_RESULTS))
+    return jsonify(RESPONSE)
 
 @app.route('/text', methods=['POST'])
 def text():
-    doc_name = request.json["docName"]
-    return jsonify(get_file_contents(doc_name))
-
+    return jsonify(get_doc_text_by_name(request.json["docName"]))
 
 @app.route('/metrics', methods=['GET'])
 def metrics():
-    return jsonify({
-        "recall": 0.8461,
-        "precision": 0.7857,
-        "accuracy": 0.8936,
-        "error": 0.1063,
-        "fMeasure": 0.8148
-    })
-
+    return jsonify(get_metrics())
 
 if __name__ == '__main__':
     app.run()

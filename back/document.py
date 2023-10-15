@@ -1,17 +1,29 @@
+import nltk
+from natural_language_utils import NaturalLanguageUtils
+import datetime
+
 class Document:
-    def __init__(self, name, text, creation_datetime):
+    def __init__(self, name: str, text: str, creation_datetime: datetime.datetime):
         self.name = name
         self.text = text
         self.creation_datetime = creation_datetime
 
-    def get_lemm_inverse_frequency(self, lemm: str) -> float:
-        pass
+    def tokenized(self) -> list[str]:
+        return nltk.word_tokenize(self.text)
 
-    def get_lemm_weight(self, lemm: str) -> float:
-        pass
+    def normalized(self) -> list[str]:
+        return NaturalLanguageUtils.normalize_tokens_only(self.tokenized())
+    
+    def has_token(self, token: str) -> bool:
+        return self.text.find(token) != -1 or token in self.normalized()
+    
+    def has_tokens(self, tokens: list[str]) -> dict[str, bool]:
+        TOKEN_PRESENCE_MAP = {}
 
-    def get_lemm_weights(self, lemm_list: list[str]) -> list[float]:
-        pass
+        for token in tokens:
+            TOKEN_PRESENCE_MAP.update({ token: self.has_token(token) })
 
-    def get_normalized_text() -> list[str]:
-        pass
+        return TOKEN_PRESENCE_MAP
+
+    def get_word_count(self) -> int:
+        return len(self.text.split())

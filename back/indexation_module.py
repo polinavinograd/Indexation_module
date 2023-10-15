@@ -1,54 +1,31 @@
 import math
-import nltk
-import os
-from logic_strategy import normalize_text, folder_path, documents_after_logic_search, delete_conjunctions
+from document import Document
+from search_query import SearchQuery
 
-files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+# to be intellectualzied (?)
+class IndexationModule:
+    def __init__(self):
+        pass
 
+    def get_inverse_frequency(self, token: str, document_list: list[Document]) -> float:
+        DOCS_THAT_HAVE_TOKEN = list(filter(lambda document: document.has_token(token), document_list))
+        return math.log(len(document_list) / len(DOCS_THAT_HAVE_TOKEN))
 
-# поиск инверсной частоты элемента запроса element
-def find_inverse_frequency(term: str) -> float:
-    file_count = 0
-    for file in os.listdir(folder_path):
-        file_contents = get_file_contents(file)
-        normalized_text = [tag[0] for tag in normalize_text(nltk.word_tokenize(file_contents))]
-        if term in file_contents:
-            file_count += 1
-        elif term in normalized_text:
-            file_count += 1
-    inverse_frequency = math.log(len(files)/file_count)
-    return inverse_frequency
+    def get_token_weight(self, token: str, document: Document, document_list: list[Document]) -> float:
+        LIST_TO_LOOK_FOR_TOKEN_IN = document.text if " " in token else document.normalized()
+        return self.get_inverse_frequency(token, document_list) * (LIST_TO_LOOK_FOR_TOKEN_IN.count(token) / document.get_word_count())
 
+    def get_token_weights(self, tokens: list[str], document: Document, document_list: list[Document]) -> dict[str, float]:
+        return dict(zip(
+            tokens,
+            list(map(lambda token: self.get_token_weight(token, document, document_list), tokens))
+        ))
 
-def find_weights_of_query_elements(tokenized_query: list, file_contents: str) -> dict:
-    weights = {}
-    normalized_text = [tag[0] for tag in normalize_text(nltk.word_tokenize(file_contents))]
-    for term in delete_conjunctions(tokenized_query):
-        if " " in term:
-            term_local_frequency = file_contents.count(term)/len(file_contents.split())
-        else:
-            term_local_frequency = normalized_text.count(term)/len(normalized_text)
-        weight = term_local_frequency * find_inverse_frequency(term)
-        weights.update({term: weight})
-    return weights
+    def get_doc_relevance(self, query: SearchQuery, document: Document, document_list: list[Document]) -> float:
+        relevance = 0
 
+        QUERY_TOKEN_WEIGHTS = self.get_token_weights(query.stripped_from_conjunctions(), document, document_list)
+        for token in QUERY_TOKEN_WEIGHTS:
+            relevance += QUERY_TOKEN_WEIGHTS[token]
 
-def get_file_contents(file_name: str) -> str:
-    file_path = os.path.join(folder_path, file_name)
-    if os.path.isfile(file_path):
-        try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                file_contents = f.read()
-                return file_contents
-        except Exception as e:
-            print(f"Ошибка при обработке файла {file_path}: {str(e)}")
-
-
-def get_sorted_relevant_docs(tokenized_query: list) -> list:
-    docs = documents_after_logic_search(tokenized_query)
-    docs_for_sorting = {}
-    for file in docs:
-        file_contents = get_file_contents(file)
-        docs_for_sorting.update({file: sum(find_weights_of_query_elements(tokenized_query, file_contents).values())})
-    sorted_docs = sorted(docs_for_sorting.items(), key=lambda item: item[1], reverse=True)
-    return [doc[0] for doc in sorted_docs]
+        return relevance
