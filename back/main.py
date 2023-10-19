@@ -5,17 +5,25 @@ from search_result import SearchResult
 from logic_strategy import filter_document_list_with_logic_strategy
 
 DOCUMENT_STORAGE = DocumentStorage()
-INDEXATION_MODULE = IndexationModule()
+INDEXATION_MODULE = IndexationModule(DOCUMENT_STORAGE)
 
 def search(query: str) -> list[SearchResult]:
     SEARCH_QUERY = SearchQuery(query)
     ALL_DOCUMENTS = DOCUMENT_STORAGE.get_all_documents()
     SUITABLE_DOCUMENTS = filter_document_list_with_logic_strategy(SEARCH_QUERY, ALL_DOCUMENTS)
-    return list(map(lambda document: SearchResult(
-        document,
-        INDEXATION_MODULE.get_token_weights(SEARCH_QUERY.stripped_from_conjunctions(), document, ALL_DOCUMENTS),
-        INDEXATION_MODULE.get_doc_relevance(SEARCH_QUERY, document, ALL_DOCUMENTS)
-    ), SUITABLE_DOCUMENTS))
+    result = list()
+    for doc in SUITABLE_DOCUMENTS:
+        top_words = {}
+        relevance = 0
+        for token in SEARCH_QUERY.stripped_from_conjunctions():
+            if token in INDEXATION_MODULE.index[doc.name].keys():
+                weight = INDEXATION_MODULE.index[doc.name][token]
+            else:
+                weight = 0
+            top_words.update({token: weight})
+            relevance += weight
+        result.append(SearchResult(doc, top_words, relevance))
+    return result
 
 def get_doc_text_by_name(doc_name: str) -> str:
     return DOCUMENT_STORAGE.get_document_by_name(doc_name).text
