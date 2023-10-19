@@ -8,16 +8,16 @@ class Document:
         self.text = text
         self.creation_datetime = creation_datetime
 
-    def tokenized(self) -> list[str]:
+    def tokenized(self) -> 'list[str]':
         return nltk.word_tokenize(self.text)
 
-    def normalized(self) -> list[str]:
+    def normalized(self) -> 'list[str]':
         return NaturalLanguageUtils.normalize_tokens_only(self.tokenized())
     
     def has_token(self, token: str) -> bool:
         return self.text.find(token) != -1 or token in self.normalized()
     
-    def has_tokens(self, tokens: list[str]) -> dict[str, bool]:
+    def has_tokens(self, tokens: 'list[str]') -> 'dict[str, bool]':
         TOKEN_PRESENCE_MAP = {}
 
         for token in tokens:

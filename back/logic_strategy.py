@@ -25,5 +25,5 @@ def logic_search_strategy(query: SearchQuery, document: Document) -> bool:
             return False
     return any(query_dict[term] for term in or_statements) if len(or_statements) != 0 else True
 
-def filter_document_list_with_logic_strategy(query: SearchQuery, document_list: list[Document]) -> list[Document]:
+def filter_document_list_with_logic_strategy(query: SearchQuery, document_list: 'list[Document]') -> 'list[Document]':
     return list(filter(lambda document: logic_search_strategy(query, document), document_list))

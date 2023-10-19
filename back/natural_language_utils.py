@@ -6,7 +6,7 @@ LEMMATIZER = WordNetLemmatizer()
 
 class NaturalLanguageUtils:
     @staticmethod
-    def normalize(tokenized_text: list[str]) -> list:
+    def normalize(tokenized_text: 'list[str]') -> list:
         part_of_speech_tags = nltk.pos_tag(tokenized_text)
         new_part_of_speech_tags = []
         for tag in part_of_speech_tags:
@@ -22,11 +22,11 @@ class NaturalLanguageUtils:
         return new_part_of_speech_tags
     
     @staticmethod
-    def normalize_tokens_only(tokenized_text: list[str]) -> list[str]:
+    def normalize_tokens_only(tokenized_text: 'list[str]') -> 'list[str]':
         return list(map(lambda tag: tag[0], NaturalLanguageUtils.normalize(tokenized_text)))
     
     @staticmethod
-    def synonyms(word: str, max_synonyms: int = 3) -> list[str]:
+    def synonyms(word: str, max_synonyms: int = 3) -> 'list[str]':
         SYNONYMS = []
 
         synonyms_found = 0

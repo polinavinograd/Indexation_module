@@ -14,7 +14,7 @@ def get_file_contents(file_path: str) -> str:
 
 class DocumentStorage:
     def __init__(self,
-                 db_path = "E:/Important/uchoba_rep/Indexation_module/back/database/documents_database.db",
+                 db_path = "/Indexation_module/back/database/documents_database.db",
                  documents_path = "E:/Important/uchoba_rep/Indexation_module/texts"
                 ):
         self.db_connection = sqlite3.connect(db_path, check_same_thread=False)
@@ -52,7 +52,7 @@ class DocumentStorage:
         '''
         )
 
-    def get_all_documents(self) -> list[Document]:
+    def get_all_documents(self) -> 'list[Document]':
         return list(map(lambda dbRow: Document(
             dbRow[0],
             dbRow[1],

@@ -7,7 +7,7 @@ from logic_strategy import filter_document_list_with_logic_strategy
 DOCUMENT_STORAGE = DocumentStorage()
 INDEXATION_MODULE = IndexationModule()
 
-def search(query: str) -> list[SearchResult]:
+def search(query: str) -> 'list[SearchResult]':
     SEARCH_QUERY = SearchQuery(query)
     ALL_DOCUMENTS = DOCUMENT_STORAGE.get_all_documents()
     SUITABLE_DOCUMENTS = filter_document_list_with_logic_strategy(SEARCH_QUERY, ALL_DOCUMENTS)
@@ -20,7 +20,7 @@ def search(query: str) -> list[SearchResult]:
 def get_doc_text_by_name(doc_name: str) -> str:
     return DOCUMENT_STORAGE.get_document_by_name(doc_name).text
 
-def get_metrics() -> dict[str, float]:
+def get_metrics() -> 'dict[str, float]':
     return {
         "recall": 0.8461,
         "precision": 0.7857,

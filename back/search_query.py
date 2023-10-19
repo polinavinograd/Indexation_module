@@ -11,22 +11,22 @@ class SearchQuery:
     # выделение точных формулировок из запроса
     # In: '"red roses" or "new document about"'
     # Out: ['red roses', 'or', 'new document about']
-    def get_exact_wording(self) -> list[str]:
+    def get_exact_wording(self) -> 'list[str]':
         return [s.strip('"') for s in re.findall(r'"[^"]*"|\S+', self.query.lower())]
     
     # токенизация запроса
-    def tokenized(self) -> list[str]:
+    def tokenized(self) -> 'list[str]':
         if self.query.count('"') > 1:
             return self.get_exact_wording()
         else:
             return nltk.word_tokenize(self.query)
     
     # нормализация (лемматизация) запроса
-    def normalized(self) -> list[str]:
+    def normalized(self) -> 'list[str]':
         return NaturalLanguageUtils.normalize_tokens_only(self.tokenized())
     
     # удаление вспомогательных частей речи (кроме союзов) и ключевых слов поиска
-    def stripped_from_excessive_tokens(self, need_to_remove_keywords: bool = True) -> list[str]:
+    def stripped_from_excessive_tokens(self, need_to_remove_keywords: bool = True) -> 'list[str]':
         resulting_tag_list = []
         for tag in NaturalLanguageUtils.normalize(self.tokenized()):
             if tag[1][0] not in ['V', 'N', 'R', 'J', 'C']:
@@ -38,5 +38,5 @@ class SearchQuery:
         return resulting_tag_list
     
     # удаление союзов из запроса
-    def stripped_from_conjunctions(self) -> list[str]:
+    def stripped_from_conjunctions(self) -> 'list[str]':
         return [term for term in self.stripped_from_excessive_tokens() if term not in ['and', 'or', 'not']]
