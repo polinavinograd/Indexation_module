@@ -7,8 +7,8 @@ from natural_language_utils import NaturalLanguageUtils
 
 
 class IndexationModule:
-    def __init__(self, document_storage):
-        with open('index.json', 'r+') as file:
+    def __init__(self, document_storage: DocumentStorage):
+        with open('/home/loktevka/Documents/uchoba/Indexation_module/back/index.json', 'r+') as file:
             try:
                 self.index = json.load(file)
             except json.JSONDecodeError:

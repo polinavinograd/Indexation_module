@@ -32,7 +32,7 @@ class Document:
         return len(self.text.split())
 
     # удаление вспомогательных частей речи (кроме союзов) и ключевых слов поиска
-    def stripped_from_excessive_tokens(self, need_to_remove_keywords: bool = True) -> list[str]:
+    def stripped_from_excessive_tokens(self, need_to_remove_keywords: bool = True) -> 'list[str]':
         resulting_tag_list = []
         for tag in NaturalLanguageUtils.normalize(self.tokenized()):
             if tag[1][0] not in ['V', 'N', 'R', 'J']:

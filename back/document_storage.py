@@ -14,8 +14,8 @@ def get_file_contents(file_path: str) -> str:
 
 class DocumentStorage:
     def __init__(self,
-                 db_path = "/Indexation_module/back/database/documents_database.db",
-                 documents_path = "E:/Important/uchoba_rep/Indexation_module/texts"
+                 db_path = "/home/loktevka/Documents/uchoba/Indexation_module/back/database/documents_database.db",
+                 documents_path = "/home/loktevka/Documents/uchoba/Indexation_module/texts"
                 ):
         self.db_connection = sqlite3.connect(db_path, check_same_thread=False)
         self.cursor = self.db_connection.cursor()
